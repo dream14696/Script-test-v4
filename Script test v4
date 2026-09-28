@@ -887,7 +887,7 @@ end
 --------------------------------------------------
 
 local Main = Instance.new("Frame")
-Main.Size = UDim2.new(0, 0, 0, 0)
+Main.Size = UDim2.new(0.8, 0, 0.8, 0)
 Main.Position = UDim2.new(0.5, 0, 0.1, 0)
 Main.AnchorPoint = Vector2.new(0.5, 0)
 Main.BackgroundColor3 = Color3.fromRGB(8, 10, 16)
@@ -948,11 +948,11 @@ task.spawn(function()
 end)
 
 --------------------------------------------------
--- BARRA
+-- BARRA DE ACENTUACIÓN
 --------------------------------------------------
 
 local XenonBar = Instance.new("Frame")
-XenonBar.Size = UDim2.new(0, 0, 0, 3)
+XenonBar.Size = UDim2.new(1, 0, 0, 3)
 XenonBar.Position = UDim2.new(0.5, 0, 0, 0)
 XenonBar.AnchorPoint = Vector2.new(0.5, 0)
 XenonBar.BackgroundColor3 = Color3.fromRGB(0, 220, 255)
@@ -1483,19 +1483,17 @@ local LocalHubBtn = Instance.new("ImageButton")
 LocalHubBtn.Name = "LocalHubBtn"
 LocalHubBtn.Size = UDim2.fromOffset(26, 26)
 LocalHubBtn.AnchorPoint = Vector2.new(1, 1)
-LocalHubBtn.Position = UDim2.new(1, -38, 1, -6) -- Al lado del ResizeBtn
+LocalHubBtn.Position = UDim2.new(1, -38, 1, -6)
 LocalHubBtn.BackgroundTransparency = 1
-LocalHubBtn.Image = "rbxassetid://13589839355" -- ID provisional para un icono tipo L/Folder. Cambiar si es necesario.
+LocalHubBtn.Image = "rbxassetid://13589839355"
 LocalHubBtn.ImageColor3 = Color3.fromRGB(255, 170, 0)
 LocalHubBtn.ZIndex = 25
 LocalHubBtn.Parent = Main
 
--- Si tienes la imagen L.png guardada en el workspace del ejecutor, 
--- usa "getcustomasset" si tu ejecutor lo soporta:
 pcall(function()
-    if getcustomasset then
-        LocalHubBtn.Image = getcustomasset("L.png")
-    end
+	if getcustomasset then
+		LocalHubBtn.Image = getcustomasset("L.png")
+	end
 end)
 
 -- 2. Menú Desplegable
@@ -1536,11 +1534,11 @@ local LocalLayout = Instance.new("UIListLayout")
 LocalLayout.Padding = UDim.new(0, 5)
 LocalLayout.Parent = LocalScroll
 
--- Base de datos de scripts locales
+-- Base de datos de scripts locales actualizada
 local LocalScriptsDB = {
 	{
 		Name = "Antislap desastre natural v1",
-		Source = [[
+		Source = [==[
 --[[
 	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
 ]]
@@ -1675,11 +1673,11 @@ player.CharacterAdded:Connect(function(newCharacter)
         setupAntiSlap()
     end
 end)
-		]]
+]==]
 	},
 	{
 		Name = "Op adivine hub v4",
-		Source = [[
+		Source = [==[
 --[[
 	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
 ]]
@@ -2514,806 +2512,115 @@ Copy.MouseButton1Click:Connect(function()
 	vibrate()
 	local ok=pcall(function()
 		if setclipboard then
-			setclipboard(PROFILE_URL)
-		else
-			error()
-		end
-	end)
-	Copy.Text=ok and "COPIED" or "COPY NOT AVAILABLE"
-	task.delay(2,function()
-		if Copy.Parent then
-			Copy.Text="COPY"
-		end
-	end)
-end)
-
-GameTab.MouseButton1Click:Connect(function()
-	vibrate()
-	GameScroll.Visible=true
-	ConfigScroll.Visible=false
-	GameTab.BackgroundColor3=Color3.fromRGB(0,85,170)
-	GameTab.TextColor3=Color3.new(1,1,1)
-
-	if Theme=="Light" then
-		ConfigTab.BackgroundColor3=Color3.fromRGB(220,225,235)
-		ConfigTab.TextColor3=Color3.fromRGB(60,70,85)
-	else
-		ConfigTab.BackgroundColor3=Color3.fromRGB(12,17,25)
-		ConfigTab.TextColor3=Color3.fromRGB(145,155,170)
-	end
-end)
-
-ConfigTab.MouseButton1Click:Connect(function()
-	vibrate()
-	GameScroll.Visible=false
-	ConfigScroll.Visible=true
-	ConfigTab.BackgroundColor3=Color3.fromRGB(0,85,170)
-	ConfigTab.TextColor3=Color3.new(1,1,1)
-
-	if Theme=="Light" then
-		GameTab.BackgroundColor3=Color3.fromRGB(220,225,235)
-		GameTab.TextColor3=Color3.fromRGB(60,70,85)
-	else
-		GameTab.BackgroundColor3=Color3.fromRGB(12,17,25)
-		GameTab.TextColor3=Color3.fromRGB(145,155,170)
-	end
-end)
-
-local LastAttacker=nil
-local LastHealth=nil
-
-local function findAttacker()
-	local char=Player.Character
-	if not char then return end
-	local root=char:FindFirstChild("HumanoidRootPart")
-	if not root then return end
-
-	local closest,dist=nil,18
-	for _,p in ipairs(Players:GetPlayers()) do
-		if p~=Player and p.Character then
-			local r=p.Character:FindFirstChild("HumanoidRootPart")
-			if r then
-				local d=(r.Position-root.Position).Magnitude
-				if d<dist then
-					dist=d
-					closest=p
-				end
-			end
-		end
-	end
-	return closest
-end
-
-local function findClosestPlayer()
-	local char=Player.Character
-	if not char then return end
-	local root=char:FindFirstChild("HumanoidRootPart")
-	if not root then return end
-
-	local closest,dist=nil,math.huge
-	for _,p in ipairs(Players:GetPlayers()) do
-		if p~=Player and p.Character then
-			local r=p.Character:FindFirstChild("HumanoidRootPart")
-			local h=p.Character:FindFirstChild("Humanoid")
-			if r and h and h.Health>0 then
-				local d=(r.Position-root.Position).Magnitude
-				if d<dist then
-					dist=d
-					closest=p
-				end
-			end
-		end
-	end
-	return closest
-end
-
-local function connectCharacter(char)
-	local hum=char:WaitForChild("Humanoid")
-	LastHealth=hum.Health
-	hum.HealthChanged:Connect(function(h)
-		if h<LastHealth then
-			local attacker=findAttacker()
-			if attacker then
-				LastAttacker=attacker
-			end
-		end
-		LastHealth=h
-	end)
-end
-
-if Player.Character then
-	connectCharacter(Player.Character)
-end
-
-Player.CharacterAdded:Connect(function(char)
-	LastAttacker=nil
-	connectCharacter(char)
-end)
-
-local Result=Instance.new("Frame")
-Result.Size=UDim2.fromOffset(250,210)
-Result.Position=UDim2.new(.5,-125,.5,-105)
-Result.BackgroundColor3=Color3.fromRGB(4,7,13)
-Result.Visible=false
-Result.ZIndex=50
-Result.Parent=GUI
-
-cr(Result,14)
-st(Result,Color3.fromRGB(0,150,255),2)
-
-local ResultAvatar=Instance.new("ImageLabel")
-ResultAvatar.Size=UDim2.fromOffset(100,100)
-ResultAvatar.Position=UDim2.new(.5,-50,0,14)
-ResultAvatar.BackgroundColor3=Color3.fromRGB(10,20,35)
-ResultAvatar.ZIndex=51
-ResultAvatar.Parent=Result
-
-cr(ResultAvatar,50)
-st(ResultAvatar,Color3.fromRGB(0,160,255),3)
-
-local ResultName=Instance.new("TextLabel")
-ResultName.Size=UDim2.new(1,-20,0,42)
-ResultName.Position=UDim2.fromOffset(10,128)
-ResultName.BackgroundTransparency=1
-ResultName.Font=Enum.Font.GothamBold
-ResultName.TextSize=15
-ResultName.TextColor3=Color3.new(1,1,1)
-ResultName.TextScaled=true
-ResultName.ZIndex=51
-ResultName.Parent=Result
-
-local Close=Instance.new("TextButton")
-Close.Size=UDim2.fromOffset(32,32)
-Close.Position=UDim2.new(1,-38,0,5)
-Close.BackgroundTransparency=1
-Close.Text="×"
-Close.Font=Enum.Font.GothamBold
-Close.TextSize=23
-Close.TextColor3=Color3.new(1,1,1)
-Close.ZIndex=52
-Close.Parent=Result
-
-Close.MouseButton1Click:Connect(function()
-	vibrate()
-	Result.Visible=false
-end)
-
-local function showPlayer(p)
-	if not p then return end
-	pcall(function()
-		ResultAvatar.Image=Players:GetUserThumbnailAsync(
-			p.UserId,
-			Enum.ThumbnailType.HeadShot,
-			Enum.ThumbnailSize.Size420x420
-		)
-	end)
-	ResultName.Text=p.DisplayName.."  @"..p.Name
-	Result.Visible=true
-	task.delay(7,function()
-		if Result.Parent then
-			Result.Visible=false
-		end
-	end)
-end
-
-Guess.MouseButton1Click:Connect(function()
-	showPlayer(LastAttacker or findAttacker())
-end)
-
-GuessAttempt.MouseButton1Click:Connect(function()
-	showPlayer(findClosestPlayer())
-end)
-
-local events=ReplicatedStorage:WaitForChild("events")
-local SlapQueue=events:WaitForChild("SlapQueue")
-local SendSlap=events:WaitForChild("SendSlap")
-local DodgeEvent=events:WaitForChild("Dodge")
-
-local SlapPower=.99927914142609
-local QueueWaiting=false
-local LastSlapTime=0
-local SlapCooldown=.20
-
-local function requestOneSlap()
-	if not AutoSlap or QueueWaiting then return end
-	QueueWaiting=true
-	pcall(function()
-		SlapQueue:FireServer()
-	end)
-end
-
-local function sendOneSlap()
-	if not AutoSlap or not QueueWaiting then return end
-	QueueWaiting=false
-	local now=os.clock()
-	if now-LastSlapTime<SlapCooldown then return end
-	LastSlapTime=now
-	pcall(function()
-		SendSlap:FireServer(SlapPower)
-	end)
-end
-
-SlapQueue.OnClientEvent:Connect(sendOneSlap)
-
-Auto.MouseButton1Click:Connect(function()
-	vibrate()
-	AutoSlap=not AutoSlap
-	if AutoSlap then
-		Auto.Text="Auto Slap     ON"
-		Auto.BackgroundColor3=Color3.fromRGB(5,45,25)
-		AutoStroke.Color=Color3.fromRGB(30,220,100)
-		requestOneSlap()
-	else
-		Auto.Text="Auto Slap     OFF"
-		Auto.BackgroundColor3=Color3.fromRGB(12,16,23)
-		AutoStroke.Color=Color3.fromRGB(65,75,95)
-		QueueWaiting=false
-	end
-end)
-
-local DodgeMode=0
-
-local function updateDodgeButtonVisual()
-	if DodgeMode==0 then
-		AutoDodgeBtn.Text="Auto Dodge [OFF]"
-		AutoDodgeBtn.BackgroundColor3=Color3.fromRGB(12,16,23)
-		AutoDodgeStroke.Color=Color3.fromRGB(65,75,95)
-	elseif DodgeMode==1 then
-		AutoDodgeBtn.Text="Auto Dodge [ON]"
-		AutoDodgeBtn.BackgroundColor3=Color3.fromRGB(45,35,5)
-		AutoDodgeStroke.Color=Color3.fromRGB(220,180,30)
-	else
-		AutoDodgeBtn.Text="Auto Dodge [SPAM]"
-		AutoDodgeBtn.BackgroundColor3=Color3.fromRGB(45,15,15)
-		AutoDodgeStroke.Color=Color3.fromRGB(220,50,50)
-	end
-end
-
-AutoDodgeBtn.MouseButton1Click:Connect(function()
-	vibrate()
-	DodgeMode=(DodgeMode+1)%3
-	updateDodgeButtonVisual()
-	if DodgeMode==0 then
-		pcall(function()
-			DodgeEvent:FireServer(false)
-		end)
-	end
-end)
-
-task.spawn(function()
-	while GUI.Parent do
-		if DodgeMode==1 then
-			pcall(function()
-				DodgeEvent:FireServer(true)
+			setclipboard("https://www.roblox.com/es/users/9059869146/profile")
+			Copy.Text="¡Copiado!"
+			task.delay(2,function()
+				Copy.Text="COPY"
 			end)
-			task.wait(.10)
-		elseif DodgeMode==2 then
-			pcall(function()
-				DodgeEvent:FireServer(true)
-			end)
-			task.wait(.05)
 		else
-			task.wait(.2)
+			Copy.Text="No Clipboard"
 		end
-	end
-end)
-
-local dragging=false
-local dragStart
-local startPos
-
-Top.InputBegan:Connect(function(input)
-	if input.UserInputType==Enum.UserInputType.Touch
-	or input.UserInputType==Enum.UserInputType.MouseButton1 then
-		dragging=true
-		dragStart=input.Position
-		startPos=Main.Position
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if not dragging then return end
-	if input.UserInputType==Enum.UserInputType.Touch
-	or input.UserInputType==Enum.MouseMovement then
-		local delta=input.Position-dragStart
-		Main.Position=UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset+delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset+delta.Y
-		)
-	end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-	if input.UserInputType==Enum.UserInputType.Touch
-	or input.UserInputType==Enum.MouseButton1 then
-		dragging=false
-	end
-end)
-
-local minimized=false
-local normalSize=UDim2.fromOffset(330,350)
-
-local function setBody(v)
-	GameTab.Visible=v
-	ConfigTab.Visible=v
-	if not v then
-		GameScroll.Visible=false
-		ConfigScroll.Visible=false
-	else
-		if ConfigScroll.Visible then
-			ConfigScroll.Visible=true
-		else
-			GameScroll.Visible=true
-		end
-	end
-end
-
-Min.MouseButton1Click:Connect(function()
-	vibrate()
-	minimized=not minimized
-	if minimized then
-		Min.Text="□"
-		setBody(false)
-		if Animations then
-			tw(Main,.25,{Size=UDim2.fromOffset(260,48)}):Play()
-		else
-			Main.Size=UDim2.fromOffset(260,48)
-		end
-	else
-		Min.Text="-"
-		if Animations then
-			tw(Main,.25,{Size=normalSize}):Play()
-		else
-			Main.Size=normalSize
-		end
-		setBody(true)
-	end
-end)
-
-local frames=0
-local fps=0
-local lastTime=os.clock()
-local statTimer=0
-
-RunService.RenderStepped:Connect(function(dt)
-	frames+=1
-	local now=os.clock()
-	if now-lastTime>=.5 then
-		fps=math.floor(frames/(now-lastTime))
-		frames=0
-		lastTime=now
-	end
-
-	statTimer+=dt
-	if statTimer>=.15 then
-		statTimer=0
-		local ping=math.floor(Player:GetNetworkPing()*1000+.5)
-		local ram=math.floor(StatsService:GetTotalMemoryUsageMb())
-		local char=Player.Character
-		local root=char and char:FindFirstChild("HumanoidRootPart")
-
-		if root then
-			local p=root.Position
-			Info.Text=string.format(
-				"FPS: %d | RAM: %d MB | Ping: %d ms\nX: %.1f  Y: %.1f  Z: %.1f",
-				fps, ram, ping, p.X, p.Y, p.Z
-			)
-		else
-			Info.Text=string.format(
-				"FPS: %d | RAM: %d MB | Ping: %d ms\nX: --  Y: --  Z: --",
-				fps, ram, ping
-			)
-		end
-	end
-end)
-
-local Notice=Instance.new("Frame")
-Notice.Size=UDim2.fromOffset(280,70)
-Notice.Position=UDim2.new(.5,-140,0,-90)
-Notice.BackgroundColor3=Color3.fromRGB(5,8,14)
-Notice.Visible=false
-Notice.ZIndex=200
-Notice.Parent=GUI
-
-cr(Notice,11)
-st(Notice,Color3.fromRGB(0,125,255),2)
-
-local NoticeText=Instance.new("TextLabel")
-NoticeText.Size=UDim2.new(1,-16,1,-8)
-NoticeText.Position=UDim2.fromOffset(8,4)
-NoticeText.BackgroundTransparency=1
-NoticeText.Text="te gusta nuestro menú,\n¡nos alegra cada momento que nos usas!"
-NoticeText.Font=Enum.Font.GothamBold
-NoticeText.TextSize=11
-NoticeText.TextWrapped=true
-NoticeText.TextColor3=Color3.new(1,1,1)
-NoticeText.ZIndex=201
-NoticeText.Parent=Notice
-
-local NoticeSound=Instance.new("Sound")
-NoticeSound.SoundId="rbxassetid://9118823101"
-NoticeSound.Volume=.35
-NoticeSound.Parent=SoundService
-
-local function showNotice()
-	if not GUI.Parent then return end
-	Notice.Visible=true
-	if Animations then
-		tw(Notice,.35,{Position=UDim2.new(.5,-140,0,15)}):Play()
-	else
-		Notice.Position=UDim2.new(.5,-140,0,15)
-	end
-	pcall(function() NoticeSound:Play() end)
-	task.wait(7)
-	if Notice.Parent then
-		if Animations then
-			local t=tw(Notice,.35,{Position=UDim2.new(.5,-140,0,-90)})
-			t:Play()
-			t.Completed:Wait()
-		else
-			Notice.Position=UDim2.new(.5,-140,0,-90)
-		end
-		Notice.Visible=false
-	end
-end
-
-task.spawn(function()
-	while GUI.Parent do
-		task.wait(900)
-		if GUI.Parent then
-			task.spawn(showNotice)
-		end
-	end
-end)
-
-local ScriptSource = [=[
-	-- Semilla de reinicio de OP ADIVINE HUB
-]=]
-
-Reset.MouseButton1Click:Connect(function()
-	vibrate()
-	AutoSlap=false
-	DodgeMode=0
-	AutoDodge=false
-	QueueWaiting=false
-	LastAttacker=nil
-	Reset.Text="REINICIANDO (3s)..."
-	task.spawn(function()
-		task.wait(3)
-		pcall(function()
-			if loadstring then
-				loadstring(ScriptSource)()
-			end
-		end)
 	end)
-	if GUI then GUI:Destroy() end
 end)
 
-Yes.MouseButton1Click:Connect(function()
-	vibrate()
-	AutoSlap=false
-	DodgeMode=0
-	AutoDodge=false
-	QueueWaiting=false
-	pcall(function()
-		DodgeEvent:FireServer(false)
-	end)
-	GUI:Destroy()
-end)
+for _, scriptData in ipairs(LocalScriptsDB) do
+	local itemBtn = Instance.new("TextButton")
+	itemBtn.Size = UDim2.new(1, 0, 0, 28)
+	itemBtn.BackgroundColor3 = Color3.fromRGB(22, 28, 38)
+	itemBtn.Text = "  " .. scriptData.Name
+	itemBtn.Font = Enum.Font.Gotham
+	itemBtn.TextSize = 10
+	itemBtn.TextColor3 = Color3.fromRGB(220, 230, 245)
+	itemBtn.TextXAlignment = Enum.TextXAlignment.Left
+	itemBtn.ZIndex = 302
+	itemBtn.Parent = LocalScroll
 
-Main.BackgroundTransparency=1
-MainStroke.Transparency=1
+	cr(itemBtn, 4)
+	st(itemBtn, Color3.fromRGB(40, 50, 70), 1)
 
-for _,o in ipairs(Main:GetDescendants()) do
-	if o:IsA("TextLabel") or o:IsA("TextButton") then
-		o.TextTransparency=1
-	elseif o:IsA("ImageLabel") then
-		o.ImageTransparency=1
-	end
-end
-
-if Animations then
-	tw(Main,1,{BackgroundTransparency=.12}):Play()
-	tw(MainStroke,1,{Transparency=0}):Play()
-	for _,o in ipairs(Main:GetDescendants()) do
-		if o:IsA("TextLabel") or o:IsA("TextButton") then
-			tw(o,1,{TextTransparency=0}):Play()
-		elseif o:IsA("ImageLabel") then
-			tw(o,1,{ImageTransparency=0}):Play()
-		end
-	end
-else
-	Main.BackgroundTransparency=.12
-	MainStroke.Transparency=0
-	for _,o in ipairs(Main:GetDescendants()) do
-		if o:IsA("TextLabel") or o:IsA("TextButton") then
-			o.TextTransparency=0
-		elseif o:IsA("ImageLabel") then
-			o.ImageTransparency=0
-		end
-	end
-end
-
-ApplyTheme()
-		]]
-	},
-	{
-		Name = "Aimbot de primos",
-		Source = [[
---[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
---// TROLL AIMBOT FP + AUTO FIRE (PERMANENTE / SNAP)
---// LocalScript | First Person | Stable | Draggable UI
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local VirtualInput = game:GetService("VirtualInputManager")
-
-local LP = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-Camera.CameraType = Enum.CameraType.Custom
-
-local HasPremium = true
-
-local aimbotEnabled = false
-local autoFireEnabled = false
-local conn
-
-local currentTarget
-local switchAt = 0
-local justSwitched = false
-
-local lastShot = 0
-local fireCooldown = 0.11
-
-local gui = Instance.new("ScreenGui")
-gui.Name = "TrollAimbotMenu"
-gui.ResetOnSpawn = false
-gui.Parent = LP:WaitForChild("PlayerGui")
-
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 290, 0, 215)
-frame.Position = UDim2.new(0.5, -145, 0.6, -107)
-frame.BackgroundColor3 = Color3.fromRGB(18,18,28)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
-
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1,0,0,36)
-title.Text = "🤡 TROLL AIMBOT FP"
-title.Font = Enum.Font.GothamBold
-title.TextSize = 15
-title.TextColor3 = Color3.fromRGB(255,90,90)
-title.BackgroundTransparency = 1
-
-local aimBtn = Instance.new("TextButton", frame)
-aimBtn.Size = UDim2.new(0, 230, 0, 36)
-aimBtn.Position = UDim2.new(0.5, -115, 0, 50)
-aimBtn.Text = "🎯 Activar Aimbot"
-aimBtn.Font = Enum.Font.Gotham
-aimBtn.TextSize = 14
-aimBtn.TextColor3 = Color3.new(1,1,1)
-aimBtn.BackgroundColor3 = Color3.fromRGB(45,45,65)
-aimBtn.BorderSizePixel = 0
-Instance.new("UICorner", aimBtn)
-
-local fireBtn = Instance.new("TextButton", frame)
-fireBtn.Size = UDim2.new(0, 230, 0, 36)
-fireBtn.Position = UDim2.new(0.5, -115, 0, 95)
-fireBtn.Text = HasPremium and "💎 Auto Disparo (OFF)" or "🔒 Auto Disparo (1999R$)"
-fireBtn.Font = Enum.Font.Gotham
-fireBtn.TextSize = 14
-fireBtn.TextColor3 = Color3.new(1,1,1)
-fireBtn.BackgroundColor3 = HasPremium and Color3.fromRGB(70,45,25) or Color3.fromRGB(40,40,40)
-fireBtn.BorderSizePixel = 0
-Instance.new("UICorner", fireBtn)
-
-local close = Instance.new("TextButton", frame)
-close.Size = UDim2.new(0, 230, 0, 30)
-close.Position = UDim2.new(0.5, -115, 0, 150)
-close.Text = "❌ Cerrar"
-close.BackgroundColor3 = Color3.fromRGB(70,30,30)
-close.TextColor3 = Color3.new(1,1,1)
-close.BorderSizePixel = 0
-Instance.new("UICorner", close)
-
-local function getTarget()
-local camPos = Camera.CFrame.Position
-local camLook = Camera.CFrame.LookVector
-local best, bestDot = nil, 0.8
-
-for _,plr in ipairs(Players:GetPlayers()) do
-if plr ~= LP and plr.Character then
-local head = plr.Character:FindFirstChild("Head")
-local hum = plr.Character:FindFirstChild("Humanoid")
-if head and hum and hum.Health > 0 then
-local dir = (head.Position - camPos).Unit
-local dot = camLook:Dot(dir)
-if dot > bestDot then
-bestDot = dot
-best = head
-end
-end
-end
-end
-return best
-end
-
-local function autoFire()
-if tick() - lastShot < fireCooldown then return end
-lastShot = tick()
-
-VirtualInput:SendMouseButtonEvent(0,0,0,true,game,0)
-task.wait(0.015)
-VirtualInput:SendMouseButtonEvent(0,0,0,false,game,0)
-end
-
-local function start()
-conn = RunService.RenderStepped:Connect(function()
-if not currentTarget or tick() > switchAt then
-currentTarget = getTarget()
-switchAt = tick() + 1
-justSwitched = true
-end
-if not currentTarget then return end
-
-local camPos = Camera.CFrame.Position
-
-local offset = Vector3.new(
-math.sin(tick()*3) * 0.18,
-math.cos(tick()*2) * 0.12,
-0
-)
-
-local desired = CFrame.lookAt(camPos, currentTarget.Position + offset)
-
-if justSwitched then
-Camera.CFrame = desired
-justSwitched = false
-else
-Camera.CFrame = Camera.CFrame:Lerp(desired, 0.35)
-end
-
-if autoFireEnabled then
-autoFire()
-end
-end)
-end
-
-local function stop()
-if conn then conn:Disconnect() conn = nil end
-currentTarget = nil
-end
-
-aimBtn.MouseButton1Click:Connect(function()
-aimbotEnabled = not aimbotEnabled
-aimBtn.Text = aimbotEnabled and "🛑 Desactivar Aimbot" or "🎯 Activar Aimbot"
-if aimbotEnabled then
-start()
-else
-stop()
-end
-end)
-
-fireBtn.MouseButton1Click:Connect(function()
-if not HasPremium then return end
-autoFireEnabled = not autoFireEnabled
-fireBtn.Text = autoFireEnabled and "💎 Auto Disparo (ON)" or "💎 Auto Disparo (OFF)"
-end)
-
-close.MouseButton1Click:Connect(function()
-stop()
-gui:Destroy()
-end)
-		]]
-	}
-}
-
--- 3. Cargar opciones en el menú local
-for i, scriptData in ipairs(LocalScriptsDB) do
-	local itemFrame = Instance.new("Frame")
-	itemFrame.Size = UDim2.new(1, 0, 0, 50)
-	itemFrame.BackgroundColor3 = Color3.fromRGB(22, 28, 40)
-	itemFrame.Parent = LocalScroll
-	cr(itemFrame, 6)
-	
-	local titleLabel = Instance.new("TextLabel")
-	titleLabel.Size = UDim2.new(1, -65, 1, 0)
-	titleLabel.Position = UDim2.fromOffset(8, 0)
-	titleLabel.BackgroundTransparency = 1
-	titleLabel.Text = scriptData.Name
-	titleLabel.Font = Enum.Font.GothamBold
-	titleLabel.TextSize = 11
-	titleLabel.TextColor3 = Color3.fromRGB(220, 230, 255)
-	titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-	titleLabel.TextWrapped = true
-	titleLabel.Parent = itemFrame
-	
-	local execBtn = Instance.new("TextButton")
-	execBtn.Size = UDim2.new(0, 50, 0, 30)
-	execBtn.Position = UDim2.new(1, -55, 0.5, -15)
-	execBtn.BackgroundColor3 = Color3.fromRGB(20, 160, 70)
-	execBtn.Text = "Ejecutar>"
-	execBtn.Font = Enum.Font.GothamBold
-	execBtn.TextSize = 9
-	execBtn.TextColor3 = Color3.new(1, 1, 1)
-	execBtn.Parent = itemFrame
-	cr(execBtn, 4)
-	
-	execBtn.MouseButton1Click:Connect(function()
+	itemBtn.MouseButton1Click:Connect(function()
 		playClickFeedback()
-		
-		-- Efecto de botón presionado
-		local origColor = execBtn.BackgroundColor3
-		execBtn.BackgroundColor3 = Color3.new(1, 1, 1)
-		task.delay(0.1, function()
-			execBtn.BackgroundColor3 = origColor
-		end)
-		
-		task.wait(0.2)
-		
-		-- Ejecutar script (Cierra todo el GUI actual)
-		if GUI then
-			GUI:Destroy()
+		local func, err = loadstring(scriptData.Source)
+		if func then
+			task.spawn(func)
+		else
+			warn("[Error Cargar Local Script]:", err)
 		end
-		
-		pcall(function()
-			local func = loadstring(scriptData.Source)
-			if func then
-				task.spawn(func)
-			else
-				warn("Error de sintaxis en el script local:", scriptData.Name)
-			end
-		end)
+		LocalHubPanel.Visible = false
 	end)
 end
 
--- Funcionalidad de apertura/cierre
 LocalHubBtn.MouseButton1Click:Connect(function()
 	playClickFeedback()
 	LocalHubPanel.Visible = not LocalHubPanel.Visible
 end)
 
--- Cerrar menú local si se hace click fuera (opcional)
-UserInputService.InputBegan:Connect(function(input)
-	if LocalHubPanel.Visible and (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then
-		-- Verifica si el click está fuera de la zona del hub local o su botón
-		local panelPos = LocalHubPanel.AbsolutePosition
-		local panelSize = LocalHubPanel.AbsoluteSize
-		local btnPos = LocalHubBtn.AbsolutePosition
-		local btnSize = LocalHubBtn.AbsoluteSize
-		local pos = input.Position
-		
-		local inPanel = pos.X >= panelPos.X and pos.X <= panelPos.X + panelSize.X and pos.Y >= panelPos.Y and pos.Y <= panelPos.Y + panelSize.Y
-		local inBtn = pos.X >= btnPos.X and pos.X <= btnPos.X + btnSize.X and pos.Y >= btnPos.Y and pos.Y <= btnPos.Y + btnSize.Y
-		
-		if not inPanel and not inBtn then
-			LocalHubPanel.Visible = false
-		end
+--------------------------------------------------
+-- BOTONES Y ACCIONES DEL TOP
+--------------------------------------------------
+
+CloseBtn.MouseButton1Click:Connect(function()
+	playClickFeedback()
+	tw(Main, 0.3, { Size = UDim2.new(0, 0, 0, 0) })
+	task.delay(0.3, function()
+		GUI:Destroy()
+	end)
+end)
+
+local minimized = false
+
+MinBtn.MouseButton1Click:Connect(function()
+	playClickFeedback()
+	minimized = not minimized
+
+	if minimized then
+		MinBtn.Text = "+"
+		SidePanel.Visible = false
+		ContentArea.Visible = false
+		ResizeBtn.Visible = false
+		LocalHubBtn.Visible = false
+
+		tw(Main, 0.3, { Size = UDim2.new(0.35, 0, 0, 50) })
+	else
+		MinBtn.Text = "-"
+		tw(Main, 0.3, { Size = UDim2.new(0.8, 0, 0.8, 0) })
+
+		task.delay(0.2, function()
+			if not minimized then
+				SidePanel.Visible = true
+				ContentArea.Visible = true
+				ResizeBtn.Visible = true
+				LocalHubBtn.Visible = true
+			end
+		end)
 	end
 end)
 
---------------------------------------------------
--- CARGA
---------------------------------------------------
-
-task.spawn(function()
-	Main.Position = UDim2.new(0.5, 0, 0.1, 0)
-	Main.Size = UDim2.new(0, 1, 0, 3)
-
-	tw(XenonBar, 0.4, { Size = UDim2.new(1, 0, 0, 3) })
-	task.wait(0.4)
-
-	tw(Main, 0.6, { Size = expandedSize })
-	task.wait(0.7)
-
-	XenonBar.BackgroundTransparency = 0
-	tw(XenonBar, 0.3, { BackgroundTransparency = 1 })
-
-	print("[OAH] Menú cargado correctamente!")
+CopyBtn.MouseButton1Click:Connect(function()
+	playClickFeedback()
+	local fullCode = GetBaseTemplate()
+	pcall(function()
+		if setclipboard then
+			setclipboard(fullCode)
+			CopyBtn.Text = "¡Copiado!"
+			task.delay(2, function()
+				CopyBtn.Text = "Copiar"
+			end)
+		else
+			CopyBtn.Text = "No Clipboard"
+		end
+	end)
 end)
+
+ExecBtn.MouseButton1Click:Connect(function()
+	playClickFeedback()
+	local fullCode = GetBaseTemplate()
+	local func, err = loadstring(fullCode)
+	if func then
+		task.spawn(func)
+	else
+		warn("[Error Creador]:", err)
+	end
+end)
+
+print("[OAH] Creador de Scripts cargado correctamente.")
